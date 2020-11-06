@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 public abstract class SortAlgorithm extends JPanel implements Runnable, ActionListener {
 	
 	int[] array;
-	final int BAR_WIDTH = 20;
 	Dimension framesize; 
+	double BAR_WIDTH;
 	private Rectangle2D rect;
 	int current_place = 0;
 	int min_place = 0;
@@ -25,6 +25,7 @@ public abstract class SortAlgorithm extends JPanel implements Runnable, ActionLi
 			
 	public SortAlgorithm(int speed, int arraySize) {
 		this.speed = speed;
+		this.arraySize = arraySize;
 		generateRandArray();
 		setSize(800,500);
 		createAndShowGUI();
@@ -70,7 +71,7 @@ public abstract class SortAlgorithm extends JPanel implements Runnable, ActionLi
 		setLayout(new BorderLayout());
 		JButton b = new JButton("Click to start the sort");
 		b.addActionListener(this);   
-		add(b, BorderLayout.SOUTH);
+		add(b, BorderLayout.NORTH);
 		setVisible(true);
 		
 	}
@@ -81,6 +82,8 @@ public abstract class SortAlgorithm extends JPanel implements Runnable, ActionLi
 		System.out.println("painting");
 		
 		framesize = getSize();
+		BAR_WIDTH = ((double)framesize.width / this.arraySize);
+		System.out.println(framesize.width + " " + BAR_WIDTH);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.BLACK);
 		
