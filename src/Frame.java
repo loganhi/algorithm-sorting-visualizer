@@ -48,7 +48,7 @@ public class Frame extends JFrame implements ActionListener{
 		MainMenu = new JPanel(new GridBagLayout());
 		
 		name = new JLabel("Logan's Sorting Algorithm Visualization");
-		String[] sortingAlgos = { "SelectionSort", "InsertionSort" };
+		String[] sortingAlgos = { "SelectionSort", "MergeSort" };
 		selectsortingAlgos = new JComboBox<String>(sortingAlgos);
 		startSort = new JButton("Click to start the sort");
 		String[] speeds = { "Slow", "Medium", "Fast"};
@@ -64,9 +64,7 @@ public class Frame extends JFrame implements ActionListener{
 	
 	private void addButtons() {
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 1;
-		c.gridy = 0; 
-		MainMenu.add(name, c);
+		MainMenu.add(name);
 		c.gridx = 0;
 		c.gridy = 1;
 		MainMenu.add(selectsortingAlgos, c);
@@ -95,6 +93,8 @@ public class Frame extends JFrame implements ActionListener{
 			if(selectsortingAlgos.getSelectedItem() == "SelectionSort") {
 				selection = new SelectionSort(speed, arraySize);
 				System.out.println("added sort");
+			} else if(selectsortingAlgos.getSelectedItem() == "MergeSort") {
+				selection = new MergeSort(speed, arraySize);
 			}
 			
 			add(selection);

@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 public abstract class SortAlgorithm extends JPanel implements Runnable, ActionListener {
 	
+	Thread sortingThread;
 	int[] array;
 	Dimension framesize; 
 	double BAR_WIDTH;
@@ -24,17 +25,33 @@ public abstract class SortAlgorithm extends JPanel implements Runnable, ActionLi
 	int arraySize = 0;
 			
 	public SortAlgorithm(int speed, int arraySize) {
+		sortingThread = new Thread(this);
 		this.speed = speed;
 		this.arraySize = arraySize;
 		generateRandArray();
 		setSize(800,500);
 		createAndShowGUI();
+		
 		//setBackground(Color.BLACK);
 		
 	}
+	
+	public abstract void sort();
 
 	@Override
-	abstract public void run();
+	public void run() {
+		sort();
+		System.out.println("Started sorting thread and repatainting");
+		repaint();
+		validate();
+		try {
+			Thread.sleep(speed);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 	//swaps the min or first value and the i value or the second value in the array
 	public void swap(int min, int i) {
@@ -44,15 +61,6 @@ public abstract class SortAlgorithm extends JPanel implements Runnable, ActionLi
 		array[i] = temp;
 		min_place = min;
 		current_place = i;
-		
-		try {
-			Thread.sleep(speed);
-			validate();
-			repaint();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	//generates a array with random ints
@@ -83,7 +91,7 @@ public abstract class SortAlgorithm extends JPanel implements Runnable, ActionLi
 		
 		framesize = getSize();
 		BAR_WIDTH = ((double)framesize.width / this.arraySize);
-		System.out.println(framesize.width + " " + BAR_WIDTH);
+		//System.out.println(framesize.width + " " + BAR_WIDTH);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.BLACK);
 		
@@ -103,7 +111,7 @@ public abstract class SortAlgorithm extends JPanel implements Runnable, ActionLi
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("Pressed button");
-		run();
+		sortingThread.start();
 		
 	}
 
