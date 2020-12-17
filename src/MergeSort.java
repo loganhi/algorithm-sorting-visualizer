@@ -1,37 +1,15 @@
 
 public class MergeSort extends SortAlgorithm{
+	int l = 0;
+	int r = array.length - 1;
 
 	public MergeSort(int speed, int arraySize) {
 		super(speed, arraySize);
 		// TODO Auto-generated constructor stub
 	}
-	
-	Thread sortingThread;
 
-	public void sort(int arr[], int l, int r) {
-		System.out.println("Creating Sorting Thread");
-		sortingThread = new Thread(new Runnable() {
-		    @Override
-		    public void run() {
-		    	System.out.println("Start Sorting");
-		    	if (l < r) {
-		            // Find the middle point
-		            int m = (l + r) / 2;
-		 
-		            // Sort first and second halves
-		            sort(arr, l, m);
-		            sort(arr, m + 1, r);
-		 
-		            // Merge the sorted halves
-		            merge(arr, l, m, r);
-		        }
-		    }
-		});  
-		sortingThread.start();
-		
-	}
-	
-	void merge(int array[], int l, int m, int r) {
+	void merge(int arr[], int l, int m, int r)
+	{
 		// Find sizes of two subarrays to be merged
 		int n1 = m - l + 1;
 		int n2 = r - m;
@@ -40,14 +18,13 @@ public class MergeSort extends SortAlgorithm{
 		int L[] = new int[n1];
 		int R[] = new int[n2];
 
-		/* Copy data to temp arrays */
+		/*Copy data to temp arrays*/
 		for (int i = 0; i < n1; ++i)
-			L[i] = array[l + i];
+			L[i] = arr[l + i];
 		for (int j = 0; j < n2; ++j)
-			R[j] = array[m + 1 + j];
+			R[j] = arr[m + 1 + j];
 
 		/* Merge the temp arrays */
-		System.out.println("Merging Temp Arrays");
 
 		// Initial indexes of first and second subarrays
 		int i = 0, j = 0;
@@ -56,10 +33,11 @@ public class MergeSort extends SortAlgorithm{
 		int k = l;
 		while (i < n1 && j < n2) {
 			if (L[i] <= R[j]) {
-				array[k] = L[i];
+				arr[k] = L[i];
 				i++;
-			} else {
-				array[k] = R[j];
+			}
+			else {
+				arr[k] = R[j];
 				j++;
 			}
 			k++;
@@ -67,20 +45,53 @@ public class MergeSort extends SortAlgorithm{
 
 		/* Copy remaining elements of L[] if any */
 		while (i < n1) {
-			array[k] = L[i];
+			arr[k] = L[i];
 			i++;
 			k++;
 		}
 
 		/* Copy remaining elements of R[] if any */
 		while (j < n2) {
-			array[k] = R[j];
+			arr[k] = R[j];
 			j++;
 			k++;
 		}
 	}
-	
-	
+
+	// Main function that sorts arr[l..r] using
+	// merge()
+	void sort(int[] arr, int l, int arrlen)
+	{
+		if (l < arrlen) {
+			// Find the middle point
+			int m = (l + arrlen) / 2;
+			this.middle = m;
+
+			// Sort first and second halves
+			sort(arr, l, m);
+			sort(arr, m + 1, arrlen);
+
+			// Merge the sorted halves
+			merge(arr, l, m, arrlen);
+
+			repaint();
+			try {
+				Thread.sleep(speed);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/* A utility function to print array of size n */
+	static void printArray(int arr[])
+	{
+		int n = arr.length;
+		for (int i = 0; i < n; ++i)
+			System.out.print(arr[i] + " ");
+		System.out.println();
+	}
+
 
 	@Override
 	public void run() {

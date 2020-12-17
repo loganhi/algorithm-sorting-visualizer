@@ -16,14 +16,21 @@ public class SelectionSort extends SortAlgorithm{
 				if (array[j] < array[min_idx]) 
 					min_idx = j; 
 
-			// Swap the found minimum element with the first 
-			// element 
+			// Swap the found minimum element with the element
 			swap(min_idx, i);
-			//					for(int e : array) {
-			//						System.out.print(e + ", ");
-			//					}
+			repaint();
+			try {
+				Thread.sleep(speed);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
-	}  
+	}
+
+	public void run() {
+		sort();
+		System.out.println("Started sorting thread and repatainting");
+	}
 
 }

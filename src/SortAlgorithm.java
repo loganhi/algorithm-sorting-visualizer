@@ -19,11 +19,16 @@ public abstract class SortAlgorithm extends JPanel implements Runnable, ActionLi
 	Dimension framesize; 
 	double BAR_WIDTH;
 	private Rectangle2D rect;
-	int current_place = 0;
-	int min_place = 0;
+
+	//Vars for keeping track of the bar painting for comparisons
+	int current_place = -1;
+	int swap = -1;
+	int middle = -1;
+
+	//user controlled vars through the GUI
 	int speed = 100;
 	int arraySize = 0;
-			
+
 	public SortAlgorithm(int speed, int arraySize) {
 		sortingThread = new Thread(this);
 		this.speed = speed;
@@ -36,32 +41,20 @@ public abstract class SortAlgorithm extends JPanel implements Runnable, ActionLi
 		
 	}
 	
-	public abstract void sort();
-
-	@Override
-	public void run() {
-		sort();
-		System.out.println("Started sorting thread and repatainting");
-		repaint();
-		validate();
-		try {
-			Thread.sleep(speed);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
 	//swaps the min or first value and the i value or the second value in the array
 	public void swap(int min, int i) {
 		System.out.println("swapping " + array[min] + " and " +  array[i]);
 		int temp = array[min]; 
 		array[min] = array[i]; 
 		array[i] = temp;
-		min_place = min;
+		swap = min;
 		current_place = i;
 	}
+
+	public void randomizeArray(){
+
+	}
+
 	
 	//generates a array with random ints
 	public void generateRandArray() {
@@ -93,19 +86,24 @@ public abstract class SortAlgorithm extends JPanel implements Runnable, ActionLi
 		BAR_WIDTH = ((double)framesize.width / this.arraySize);
 		//System.out.println(framesize.width + " " + BAR_WIDTH);
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(Color.BLACK);
-		
+
 		for(int i = 0; i < array.length; i++) {
             rect = new Rectangle2D.Double(BAR_WIDTH * i, framesize.height - array[i], BAR_WIDTH, array[i]);
-            g2.fill(rect);
-			//g2.drawRect(BAR_WIDTH * i, framesize.height - array[i], BAR_WIDTH, array[i]);
-            if(min_place == i || current_place == i) {
-            	g2.setColor(Color.RED);
-            }else {
-            	g2.setColor(Color.BLACK);
+
+            if(swap == i || current_place == i) {
+            	g2.setColor(new Color(155, 246, 255));
             }
+			else if(i == middle) {
+				System.out.println(middle);
+				g2.setColor(new Color(255, 173, 173));
+			}else if (i < middle){
+				g2.setColor(new Color(253, 255, 182));
+			}
+            else {
+            	g2.setColor(new Color(52, 58, 64));
+            }
+			g2.fill(rect);
 		}
-		
 	}
 	
 	@Override
@@ -114,7 +112,4 @@ public abstract class SortAlgorithm extends JPanel implements Runnable, ActionLi
 		sortingThread.start();
 		
 	}
-
-	
-
 }

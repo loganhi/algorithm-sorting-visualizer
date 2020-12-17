@@ -1,6 +1,4 @@
-import java.awt.CardLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,7 +8,7 @@ import javax.swing.*;
 public class Frame extends JFrame implements ActionListener{ 
 	SortAlgorithm selection;
 	
-	JPanel MainMenu;
+	JPanel menuPanel;
 	JComboBox<String> selectsortingAlgos;
 	JLabel name;
 	JButton startSort;
@@ -25,29 +23,26 @@ public class Frame extends JFrame implements ActionListener{
 		createAndShowGUI();
 			
 	}
-	
-	public void createAndShowGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(800,500);
-		setLayout(new CardLayout());
-		createMainMenu();
-		addButtons();
-		addCards();
-		//add(selection, BorderLayout.CENTER);
-		
-//		JButton b = new JButton("Click to start the sort");
-//		b.addActionListener(this);   
-//		add(b, BorderLayout.SOUTH);
-//		
-		setVisible(true);
-		
-	}
-	
-	private void createMainMenu() {
-		//creating the main menu and the corresponding buttons
-		MainMenu = new JPanel(new GridBagLayout());
-		
-		name = new JLabel("Logan's Sorting Algorithm Visualization");
+	private void initialize() {
+
+		menuPanel = new JPanel();
+		this.getContentPane().add(menuPanel, "name_3100283044700");
+		menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
+
+		JPanel titlePanel = new JPanel();
+		menuPanel.add(titlePanel);
+		FlowLayout fl_titlePanel = new FlowLayout(FlowLayout.CENTER, 5, 5);
+		titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
+
+		JLabel lblSortingAlgorithem = new JLabel("Sorting Algorithm Visualizer");
+		lblSortingAlgorithem.setFont(new Font("Tahoma", Font.PLAIN, 26));
+		titlePanel.add(lblSortingAlgorithem);
+
+		JPanel userInputPanel = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) userInputPanel.getLayout();
+		menuPanel.add(userInputPanel);
+
+		//creating the buttons to control functionality of the app.
 		String[] sortingAlgos = { "SelectionSort", "MergeSort" };
 		selectsortingAlgos = new JComboBox<String>(sortingAlgos);
 		startSort = new JButton("Click to start the sort");
@@ -55,29 +50,52 @@ public class Frame extends JFrame implements ActionListener{
 		selectSpeed = new JComboBox<String>(speeds);
 		String[] arraySizes = { "Small", "Medium", "Large"};
 		selectArraySize = new JComboBox<String>(arraySizes);
-		
-	}
 
-	private void addCards() {
-		add(MainMenu);
+		//adding action listeners to the button
+		selectsortingAlgos.addActionListener(this);
+		startSort.addActionListener(this);
+		selectSpeed.addActionListener(this);
+		selectArraySize.addActionListener(this);
+
+		//adding the buttons the app.
+		userInputPanel.add(startSort);
+		userInputPanel.add(selectsortingAlgos);
+		userInputPanel.add(selectSpeed);
+		userInputPanel.add(selectArraySize);
 	}
 	
-	private void addButtons() {
-		GridBagConstraints c = new GridBagConstraints();
-		MainMenu.add(name);
-		c.gridx = 0;
-		c.gridy = 1;
-		MainMenu.add(selectsortingAlgos, c);
-		selectsortingAlgos.addActionListener(this);
-		c.gridx = 1;
-		MainMenu.add(startSort, c);
-		startSort.addActionListener(this);
-		c.gridx = 2;
-		MainMenu.add(selectSpeed, c);
-		selectSpeed.addActionListener(this);
-		c.gridx = 3;
-		MainMenu.add(selectArraySize, c);
-		selectArraySize.addActionListener(this);
+	public void createAndShowGUI() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(800,500);
+		setLayout(new CardLayout());
+		initialize();
+//		createMainMenu();
+//		addButtons();
+//		addCards();
+		//add(selection, BorderLayout.CENTER);
+
+//		JButton b = new JButton("Click to start the sort");
+//		b.addActionListener(this);
+//		add(b, BorderLayout.SOUTH);
+//
+		setVisible(true);
+
+	}
+
+	private void createMainMenu() {
+		//creating the main menu and the corresponding buttons
+
+		//MainMenu = new JPanel();
+
+		name = new JLabel("Logan's Sorting Algorithm Visualization", null, JLabel.CENTER);
+		String[] sortingAlgos = { "SelectionSort", "MergeSort" };
+		selectsortingAlgos = new JComboBox<String>(sortingAlgos);
+		startSort = new JButton("Click to start the sort");
+		String[] speeds = { "Slow", "Medium", "Fast"};
+		selectSpeed = new JComboBox<String>(speeds);
+		String[] arraySizes = { "Small", "Medium", "Large"};
+		selectArraySize = new JComboBox<String>(arraySizes);
+
 	}
 
 	@Override
@@ -99,13 +117,13 @@ public class Frame extends JFrame implements ActionListener{
 			
 			add(selection);
 			selection.setVisible(true);
-			MainMenu.setVisible(false);
+			menuPanel.setVisible(false);
 		}
 		
 		if(e.getSource() == selectSpeed) {
 			System.out.println("clicked");
 			if(selectSpeed.getSelectedItem() == "Slow") {
-				speed = 500;
+				speed = 800;
 			}else if(selectSpeed.getSelectedItem() == "Medium") {
 				speed = 250;
 			}else if(selectSpeed.getSelectedItem() == "Fast") {
